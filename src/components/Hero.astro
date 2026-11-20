@@ -1,0 +1,114 @@
+---
+// Muro de historias: tres filas inclinadas que se mueven en sentidos opuestos. Fotos de stock teñidas de dorado.
+const frames = [
+  { img: `${import.meta.env.BASE_URL}images/t/dance.jpg`, pos: '50% 45%' },
+  { img: `${import.meta.env.BASE_URL}images/t/pod-host.jpg`, pos: '36% 50%' },
+  { img: `${import.meta.env.BASE_URL}images/t/stream-desk.jpg`, pos: '76% 50%' },
+  { img: `${import.meta.env.BASE_URL}images/t/p4.jpg`, pos: '50% 40%' },
+  { img: `${import.meta.env.BASE_URL}images/t/red-lights.jpg`, pos: '50% 38%' },
+  { img: `${import.meta.env.BASE_URL}images/t/phone-live.jpg`, pos: '40% 45%' },
+];
+const rotate = (arr: typeof frames, n: number) => [...arr.slice(n), ...arr.slice(0, n)];
+const rows = [rotate(frames, 0), rotate(frames, 2), rotate(frames, 4)];
+const copies = [0, 1, 2, 3];
+---
+<section class="hero" id="top" aria-label="Portada">
+  <div class="wall" aria-hidden="true">
+    {rows.map((row, r) => (
+      <div class={`wrow ${r % 2 ? 'rev' : ''}`} style={`--r:${r}`}>
+        <div class="track">
+          {copies.map(() => row.map((f, i) => (
+            <figure class="card">
+              <img src={f.img} alt="" style={`object-position:${f.pos}`} width="400" height="620" loading="eager" decoding="async" />
+            </figure>
+          )))}
+        </div>
+      </div>
+    ))}
+  </div>
+  <div class="shade" aria-hidden="true"></div>
+
+  <div class="content">
+    <div class="head">
+      <p class="label mono" data-hero-in>Agencia de influencers · Perú</p>
+      <div class="age" data-hero-in><b>+18</b><span class="mono">con contrato</span></div>
+    </div>
+
+    <h1 aria-label="Te formamos para ser influencer.">
+      <span class="ln"><span>Te formamos para ser</span></span>
+      <span class="ln hl"><span><mark>influencer</mark><em>.</em></span></span>
+    </h1>
+
+    <div class="mid">
+      <div class="left">
+        <p class="sub" data-hero-in>Bailes en vivo, transmisiones, podcasts y shows con el público. En Expansión Live te formamos y te representamos.</p>
+        <div class="ctas" data-hero-in>
+          <a href="#postula" class="btn">Postula ahora <span class="arr">→</span></a>
+          <a href="#que-hacemos" class="btn ghost">Qué hacemos</a>
+        </div>
+      </div>
+      <div class="right" data-hero-in>
+        <p class="req mono">Solo mayores de 18 años · Con contrato firmado</p>
+        <p class="backed"><i aria-hidden="true"></i>Con el respaldo de <b>SPACE PRODUCCIONES</b></p>
+      </div>
+    </div>
+  </div>
+  <p class="stock mono" aria-hidden="true">Fotos de stock</p>
+</section>
+<style>
+  .hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 7.2rem 0 3.6rem; overflow: hidden; background: var(--black); isolation: isolate; }
+
+  /* muro: tres filas inclinadas con tarjetas verticales, cada fila a su ritmo */
+  .wall { position: absolute; contain: layout paint; inset: -30% -18%; z-index: -2; display: flex; flex-direction: column; justify-content: center; gap: clamp(.8rem, 1.4vw, 1.2rem); transform: rotate(-8deg); }
+  .wrow { display: flex; margin-left: calc(var(--r) * -7rem); }
+  .track { display: flex; gap: clamp(.8rem, 1.4vw, 1.2rem); width: max-content; will-change: transform; }
+  .card { flex: none; width: clamp(9rem, 13vw, 13rem); aspect-ratio: 9 / 14; border-radius: 1.3rem; overflow: hidden; background: var(--carbon); box-shadow: 0 0 0 1px rgba(201, 163, 74, .4); }
+  .card img { width: 100%; height: 100%; object-fit: cover; }
+  /* velo: oscurece de izquierda a derecha para que el titular se lea y las fotos luzcan a la derecha */
+  .shade { position: absolute; inset: 0; z-index: -1; background:
+    linear-gradient(to top, rgba(8, 8, 8, .96) 0%, rgba(8, 8, 8, .5) 22%, transparent 45%),
+    linear-gradient(to bottom, rgba(8, 8, 8, .7) 0%, transparent 22%),
+    linear-gradient(90deg, rgba(8, 8, 8, .95) 0%, rgba(8, 8, 8, .8) 38%, rgba(8, 8, 8, .42) 72%, rgba(8, 8, 8, .22) 100%); }
+
+  .content { display: flex; flex-direction: column; gap: clamp(1rem, 2.4vw, 2rem); }
+  .head, h1, .mid { padding-inline: var(--pad); max-width: 92rem; width: 100%; margin-inline: auto; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  .head .label { margin-bottom: 0; background: rgba(8, 8, 8, .6); }
+  .age { flex: none; width: 5.6rem; aspect-ratio: 1; border-radius: 50%; background: var(--gold-lit); color: var(--black); display: grid; place-content: center; text-align: center; transform: rotate(12deg); box-shadow: 0 10px 24px rgba(0, 0, 0, .5); }
+  .age b { font-family: var(--f-display); font-weight: 400; font-size: 2rem; line-height: .95; }
+  .age span { font-size: .5rem; letter-spacing: .08em; }
+
+  h1 { font-size: clamp(3rem, 8.2vw, 9rem); line-height: .94; text-shadow: 0 4px 40px rgba(0, 0, 0, .55); }
+  .ln { display: block; overflow: hidden; padding: .04em 0 .08em; margin-bottom: -.08em; }
+  .ln > span { display: inline-block; will-change: transform; }
+  .ln.hl { overflow: visible; padding-top: .14em; }
+  .hl mark { display: inline-block; background: var(--gold-lit); color: var(--black); padding: .02em .14em .06em; transform: rotate(-1.8deg); text-shadow: none; }
+  .hl em { font-size: 1.15em; padding-left: .04em; }
+
+  .mid { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem 3rem; flex-wrap: wrap; }
+  .sub { max-width: 32rem; font-size: 1.1rem; opacity: .95; text-shadow: 0 2px 20px rgba(0, 0, 0, .7); }
+  .ctas { display: flex; flex-wrap: wrap; gap: .8rem 1rem; margin-top: 1.4rem; }
+  .ctas .ghost { background: rgba(8, 8, 8, .55); }
+  .right { text-align: right; display: grid; gap: .5rem; justify-items: end; text-shadow: 0 2px 16px rgba(0, 0, 0, .8); }
+  .req { opacity: .75; }
+  .backed { font-size: .92rem; }
+  .backed i { display: inline-block; vertical-align: middle; width: 1.6rem; height: 1px; margin-right: .7rem; background: var(--gold); }
+  .backed b { font-weight: 500; letter-spacing: .04em; color: var(--gold-lit); }
+  .stock { position: absolute; right: var(--pad); bottom: .7rem; opacity: .5; font-size: .56rem; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .track { animation: drift 120s linear infinite; }
+    .rev .track { animation-name: driftrev; animation-duration: 140s; }
+  }
+  @keyframes drift { to { transform: translateX(-25%); } }
+  @keyframes driftrev { from { transform: translateX(-25%); } to { transform: translateX(0); } }
+
+  @media (max-width: 760px) {
+    .hero { padding-top: 6.2rem; }
+    .age { width: 4.6rem; } .age b { font-size: 1.6rem; }
+    .right { text-align: left; justify-items: start; }
+    .shade { background:
+      linear-gradient(to top, rgba(8, 8, 8, .97) 0%, rgba(8, 8, 8, .6) 40%, transparent 70%),
+      linear-gradient(to bottom, rgba(8, 8, 8, .75) 0%, rgba(8, 8, 8, .45) 100%); }
+  }
+</style>

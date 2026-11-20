@@ -1,0 +1,22 @@
+---
+import { ticker } from '../data/site';
+---
+<section class="band" aria-label="Lo que hacemos en Expansión Live">
+  <div class="marquee">
+    <ul class="run">{ticker.map((t) => <li>{t}</li>)}</ul>
+    <ul class="run dup" aria-hidden="true">{ticker.map((t) => <li>{t}</li>)}</ul>
+  </div>
+</section>
+<style>
+  .band { background: var(--gold-lit); color: var(--black); overflow: hidden; transform: rotate(-1.4deg); margin: -1.2rem -1rem 0; position: relative; z-index: 4; box-shadow: 0 14px 40px rgba(0, 0, 0, .5); }
+  .marquee { display: flex; }
+  .run { display: flex; flex-shrink: 0; min-width: 100%; justify-content: space-around; align-items: center; list-style: none; padding: .7rem 0; }
+  li { font-family: var(--f-display); text-transform: uppercase; font-size: clamp(1.8rem, 4.2vw, 3.4rem); line-height: 1; white-space: nowrap; display: flex; align-items: center; gap: clamp(1.2rem, 3vw, 2.6rem); padding-inline: clamp(.8rem, 2vw, 1.6rem); }
+  li::after { content: '✦'; font-family: var(--f-body); font-size: .6em; }
+  @media (prefers-reduced-motion: no-preference) {
+    .run { animation: slide 34s linear infinite; }
+    .marquee:hover .run { animation-play-state: paused; }
+  }
+  @keyframes slide { to { transform: translateX(-100%); } }
+  @media (prefers-reduced-motion: reduce) { .band { transform: none; margin: 0; } .run { flex-wrap: wrap; justify-content: center; } .dup { display: none; } }
+</style>

@@ -1,0 +1,85 @@
+---
+import { contact, steps } from '../data/site';
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
+const hasContact = Boolean(contact.email || contact.phone || contact.whatsapp || contact.social.length);
+---
+<section class="section join" id="postula" aria-labelledby="join-h">
+  <div class="cols">
+    <div class="intro">
+      <p class="label mono" data-reveal>04 · Postula</p>
+      <h2 id="join-h" data-split>Empieza tu camino <em>como influencer.</em></h2>
+      <ul class="req" data-reveal>
+        <li><b class="mono">+18</b> Ser mayor de 18 años</li>
+        <li><b class="mono">✍</b> Firmar un contrato con la agencia</li>
+      </ul>
+      <ol class="steps" data-reveal>
+        {steps.map((s) => <li><span class="n">{s.n}</span><div><h3>{s.t}</h3><p>{s.d}</p></div></li>)}
+      </ol>
+    </div>
+
+    <form id="postula-form" novalidate data-endpoint={endpoint} aria-describedby="fstatus">
+      <div class="f"><label for="nombre">Nombre completo</label><input id="nombre" name="nombre" autocomplete="name" required /><small class="err" aria-live="polite"></small></div>
+      <div class="f"><label for="correo">Correo electrónico</label><input id="correo" name="correo" type="email" autocomplete="email" required /><small class="err" aria-live="polite"></small></div>
+      <div class="f"><label for="wsp">WhatsApp</label><input id="wsp" name="whatsapp" type="tel" autocomplete="tel" placeholder="+51 9XX XXX XXX" required /><small class="err" aria-live="polite"></small></div>
+      <div class="f"><label for="ciudad">Ciudad (opcional)</label><input id="ciudad" name="ciudad" autocomplete="address-level2" /></div>
+      <div class="f full"><label for="red">Tu red principal</label><input id="red" name="red_principal" placeholder="@usuario o enlace de TikTok, Instagram, Kick, Twitch…" required /><small class="err" aria-live="polite"></small></div>
+      <div class="f full"><label for="interes">¿Qué te gustaría hacer?</label>
+        <select id="interes" name="interes" required>
+          <option value="">Selecciona una opción</option>
+          <option>Bailes en vivo</option>
+          <option>Transmisiones</option>
+          <option>Podcast</option>
+          <option>Risas y shows con el público</option>
+          <option>Todo lo anterior</option>
+        </select><small class="err" aria-live="polite"></small></div>
+      <div class="f full"><label for="msg">Cuéntanos sobre ti (opcional)</label><textarea id="msg" name="mensaje" rows="3"></textarea></div>
+      <div class="f full chk">
+        <label class="ck" for="edad"><input id="edad" name="mayor_de_18" type="checkbox" required /><span>Tengo 18 años o más y entiendo que, para trabajar con Expansión Live, firmaré un contrato.</span></label>
+        <small class="err" aria-live="polite"></small>
+      </div>
+      <div class="full"><button type="submit" class="btn">Enviar postulación <span class="arr">→</span></button></div>
+      <p id="fstatus" class="status" role="status"></p>
+      {hasContact && (
+        <dl class="info mono full">
+          {contact.email && <><dt>Correo</dt><dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd></>}
+          {contact.phone && <><dt>Teléfono</dt><dd><a href={`tel:${contact.phone.replace(/[^+\d]/g, '')}`}>{contact.phone}</a></dd></>}
+          {contact.social.length > 0 && <><dt>Redes</dt><dd class="soc">{contact.social.map((s) => <a href={s.url} rel="noopener" target="_blank">{s.label}</a>)}</dd></>}
+        </dl>
+      )}
+    </form>
+  </div>
+</section>
+<style>
+  .join { background: var(--carbon); }
+  .cols { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+  h2 { font-size: clamp(2.8rem, 6.6vw, 6.8rem); }
+  .req { list-style: none; margin-top: 2rem; display: grid; gap: .7rem; }
+  .req li { display: flex; align-items: center; gap: .9rem; font-weight: 500; }
+  .req b { display: grid; place-items: center; min-width: 2.8rem; height: 2.8rem; border: 1.5px solid var(--gold); color: var(--gold-lit); border-radius: 50%; font-size: .72rem; }
+  .steps { list-style: none; margin-top: 2.4rem; display: grid; gap: .8rem; }
+  .steps li { display: grid; grid-template-columns: 3.2rem 1fr; gap: .9rem; align-items: start; padding: 1rem 1.1rem; border-radius: 1.1rem; background: rgba(241, 239, 233, .05); border: 1px solid var(--line); }
+  .steps .n { display: grid; place-items: center; width: 3.2rem; height: 3.2rem; border-radius: 50%; background: var(--gold-lit); color: var(--black); font-family: var(--f-display); font-size: 1.3rem; }
+  .steps h3 { font-size: 1.7rem; }
+  .steps p { font-size: .95rem; opacity: .8; }
+
+  /* ficha de postulación: papel claro sobre fondo oscuro */
+  form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 1.6rem; background: var(--warm); color: var(--black); padding: clamp(1.4rem, 3vw, 2.4rem); border-radius: 1.8rem; box-shadow: 0 0 0 3px var(--gold), 0 30px 70px rgba(0, 0, 0, .5); transform: rotate(.6deg); }
+  .full { grid-column: 1 / -1; }
+  .f { display: flex; flex-direction: column; gap: .35rem; }
+  label { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--deep); }
+  input, select, textarea { background: transparent; border: 0; border-bottom: 1.5px solid rgba(8, 8, 8, .25); color: var(--black); font: inherit; font-size: 1.02rem; padding: .65rem 0; border-radius: 0; transition: border-color .3s; }
+  input::placeholder { color: var(--black); opacity: .4; }
+  textarea { resize: vertical; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--mustard); }
+  .f.bad input, .f.bad select, .f.bad textarea { border-color: #b3261e; }
+  .ck { display: flex; align-items: flex-start; gap: .8rem; cursor: pointer; font-family: var(--f-body); font-size: .88rem; letter-spacing: 0; text-transform: none; color: var(--black); line-height: 1.5; }
+  .ck input { flex: none; width: 1.2rem; height: 1.2rem; margin-top: .15rem; padding: 0; border: 0; accent-color: var(--mustard); }
+  .err { color: #b3261e; font-size: .78rem; min-height: 1em; font-weight: 500; }
+  .status { grid-column: 1 / -1; font-size: .92rem; font-weight: 500; color: var(--deep); }
+  .info { display: grid; gap: .2rem; border-top: 1px solid rgba(8, 8, 8, .2); padding-top: 1rem; }
+  .info dt { color: var(--deep); margin-top: .6rem; } .info dd { text-transform: none; letter-spacing: .03em; }
+  .info a { text-decoration: underline; text-underline-offset: .25em; }
+  .soc { display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } form { transform: none; } }
+  @media (max-width: 560px) { form { grid-template-columns: 1fr; } }
+</style>

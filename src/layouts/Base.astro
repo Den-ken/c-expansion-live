@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+import Fab from '../components/Fab.astro';
+const { title, description } = Astro.props;
+---
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#120d0d" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_PE" />
+  <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
+  <script is:inline>document.documentElement.classList.add('js');</script>
+  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"Organization","name":"Expansión Live","description":description,"areaServed":"PE"})} />
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+  <slot />
+  <Fab />
+  <script src="../scripts/main.ts"></script>
+</body>
+</html>

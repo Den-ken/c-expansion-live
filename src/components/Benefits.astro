@@ -1,0 +1,32 @@
+---
+import { benefits } from '../data/site';
+---
+<section class="section ben" id="beneficios" aria-labelledby="ben-h">
+  <p class="label mono" data-reveal>03 · Beneficios</p>
+  <h2 id="ben-h" data-split>Lo que ganas <em>al entrar.</em></h2>
+  <ol class="notes">
+    {benefits.map((b, i) => (
+      <li class="note" style={`--i:${i}`} data-reveal>
+        <span class="n">{b.n}</span>
+        <h3>{b.t}</h3>
+        <p>{b.d}</p>
+      </li>
+    ))}
+  </ol>
+</section>
+<style>
+  .ben { background: var(--mustard); color: var(--black); overflow: hidden; }
+  .ben h2 { color: var(--black); font-size: clamp(3rem, 8vw, 8.2rem); max-width: 12ch; }
+  .ben em { color: var(--black); }
+  .ben .label { color: var(--black); border-color: var(--black); }
+  /* notitas pegadas, un poco inclinadas */
+  .notes { list-style: none; display: grid; grid-template-columns: repeat(6, 1fr); gap: clamp(1rem, 2vw, 1.6rem); margin-top: clamp(2rem, 4vw, 3.4rem); }
+  .note { grid-column: span 2; background: var(--warm); border-radius: .9rem; padding: clamp(1.2rem, 2.2vw, 1.8rem); display: grid; gap: .5rem; align-content: start; box-shadow: 0 14px 30px rgba(0, 0, 0, .22); transform: rotate(calc((var(--i) - 2) * 1.1deg)); transition: transform .5s var(--out); }
+  .note:nth-child(4) { grid-column: 2 / span 2; } .note:nth-child(5) { grid-column: span 2; }
+  .note:hover { transform: rotate(0) translateY(-.3rem); }
+  .n { font-family: var(--f-display); font-size: 2.6rem; line-height: .9; color: var(--deep); }
+  .note h3 { font-size: clamp(1.7rem, 2.6vw, 2.3rem); color: var(--black); }
+  .note p { font-size: .98rem; line-height: 1.5; }
+  @media (max-width: 900px) { .notes { grid-template-columns: 1fr 1fr; } .note, .note:nth-child(4), .note:nth-child(5) { grid-column: auto; } }
+  @media (max-width: 560px) { .notes { grid-template-columns: 1fr; } }
+</style>

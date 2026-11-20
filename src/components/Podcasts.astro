@@ -1,0 +1,151 @@
+---
+import { podcasts } from '../data/site';
+const wave = Array.from({ length: 56 }, (_, i) => ({ i, h: 14 + ((i * 53 + (i % 7) * 19) % 78) }));
+// polvo flotante de "En otro plano" (posiciones fijas para que siempre se vea igual)
+const dust = Array.from({ length: 14 }, (_, i) => ({ x: (i * 37 + 11) % 96, y: (i * 53 + 7) % 84, d: (i * 0.7) % 6, s: 3 + (i % 4) }));
+const terror = podcasts.find((p) => p.id === 'terror')!;
+const farandula = podcasts.find((p) => p.id === 'farandula')!;
+---
+<section class="section pods" id="podcasts" aria-labelledby="pod-h">
+  <div class="wrap">
+    <p class="label mono" data-reveal>02 · Podcasts</p>
+    <h2 id="pod-h" data-split>Dos podcasts, <em>dos mundos.</em></h2>
+
+    <div class="duo" data-reveal>
+      <!-- MUNDO 1: En otro plano -->
+      <article class="world terror">
+        <img class="photo" src={`${import.meta.env.BASE_URL}images/t/pod-mic-dark.jpg`} alt="" loading="lazy" decoding="async" />
+        <div class="fog" aria-hidden="true"></div>
+        <div class="glow" aria-hidden="true"></div>
+        <i class="ring r1" aria-hidden="true"></i><i class="ring r2" aria-hidden="true"></i><i class="ring r3" aria-hidden="true"></i>
+        <div class="door" aria-hidden="true"><span class="slit"></span></div>
+        <span class="spill" aria-hidden="true"></span>
+        <div class="dust" aria-hidden="true">{dust.map((d) => <i style={`left:${d.x}%;top:${d.y}%;--d:${d.d}s;--s:${d.s}px`}></i>)}</div>
+        <div class="in">
+          <div class="top"><p class="tag mono">{terror.tag}</p><span class="stock mono">Foto de stock</span></div>
+          <div class="bot">
+            <h3>{terror.title}</h3>
+            <p class="txt">{terror.text}</p>
+            <div class="player" aria-hidden="true"><span class="pl"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" /></svg></span><div class="wave">{wave.map((b) => <i style={`--h:${b.h}%`}></i>)}</div></div>
+            <p class="soon mono">Próximamente</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- MUNDO 2: No lo oíste de mí — escenario de farándula: reflector, micrófono y flashes de cámara -->
+      <article class="world farandula">
+        <div class="curtain cl" aria-hidden="true"></div><div class="curtain cr" aria-hidden="true"></div>
+        <div class="cone" aria-hidden="true"></div>
+        <div class="pool" aria-hidden="true"></div>
+        <svg class="mic" viewBox="0 0 64 96" aria-hidden="true"><rect x="20" y="4" width="24" height="44" rx="12" fill="currentColor" /><path d="M10 40v6a22 22 0 0 0 44 0v-6M32 68v20M20 90h24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" /></svg>
+        <span class="bub b1" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="bub b2 mono" aria-hidden="true">psst…</span>
+        <span class="bub b3 mono" aria-hidden="true">shh…</span>
+        <span class="flash f1" aria-hidden="true">✦</span><span class="flash f2" aria-hidden="true">✦</span><span class="flash f3" aria-hidden="true">✦</span>
+        <span class="flash f4" aria-hidden="true">✦</span><span class="flash f5" aria-hidden="true">✦</span><span class="flash f6" aria-hidden="true">✦</span>
+        <div class="in">
+          <div class="top"><p class="tag mono">{farandula.tag}</p></div>
+          <div class="bot">
+            <h3>{farandula.title}</h3>
+            <p class="txt">{farandula.text}</p>
+            <div class="player" aria-hidden="true"><span class="pl"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" /></svg></span><div class="wave">{wave.map((b) => <i style={`--h:${b.h}%`}></i>)}</div></div>
+            <p class="soon mono">Próximamente</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+<style>
+  .pods { background: var(--black); }
+  .wrap { max-width: 88rem; margin-inline: auto; }
+  .pods h2 { font-size: clamp(3rem, 8.4vw, 8.2rem); max-width: 12ch; }
+
+  /* dos mundos enfrentados. Al pasar el cursor solo cambian transform y opacidad (no recalculan el diseño) */
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(.8rem, 1.6vw, 1.2rem); height: clamp(36rem, 84vh, 50rem); margin-top: clamp(2rem, 4vw, 3.4rem); }
+  .world { position: relative; overflow: hidden; border-radius: 2.2rem; isolation: isolate; contain: layout paint; transition: transform .6s var(--out), opacity .6s var(--out); }
+  @media (hover: hover) and (min-width: 861px) {
+    .duo:hover .world:not(:hover) { opacity: .55; transform: scale(.985); }
+    .duo .world:hover { transform: translateY(-.45rem); }
+  }
+  .in { position: absolute; inset: 0; z-index: 5; padding: clamp(1.2rem, 2.4vw, 2rem); display: flex; flex-direction: column; justify-content: space-between; }
+  .top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: .6rem; }
+  .tag { padding: .45rem 1rem; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+  .stock { font-size: .54rem; opacity: .6; padding-top: .5rem; white-space: nowrap; }
+  .bot { display: grid; gap: .9rem; justify-items: start; }
+  .bot h3 { font-size: clamp(3.2rem, 7vw, 7.6rem); line-height: 1.08; text-wrap: balance; max-width: 9ch; }
+  .txt { font-size: 1.05rem; max-width: 24rem; }
+  .soon { opacity: .75; }
+  .player { display: flex; align-items: center; gap: .9rem; width: 100%; max-width: 32rem; }
+  .pl { flex: none; width: 3rem; height: 3rem; border-radius: 50%; display: grid; place-items: center; background: var(--gold-lit); color: var(--black); }
+  .pl svg { width: 1.2rem; height: 1.2rem; margin-left: .12rem; }
+  .wave { flex: 1; min-width: 0; overflow: hidden; height: 2.4rem; display: flex; align-items: center; gap: 2px; }
+  .wave i { flex: 1; min-width: 2px; height: var(--h); background: currentColor; border-radius: 2px; opacity: .35; }
+  .wave i:nth-child(-n+9) { opacity: 1; }
+
+  /* ===== En otro plano ===== */
+  .terror { background: #070707; border: 1px solid rgba(201, 163, 74, .35); color: var(--gold-lit); }
+  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; z-index: -3; opacity: .7; }
+  .fog { position: absolute; inset: -20%; z-index: -2; will-change: transform;
+    background: radial-gradient(38% 30% at 18% 72%, rgba(231, 198, 107, .16), transparent 70%), radial-gradient(34% 28% at 84% 38%, rgba(231, 198, 107, .12), transparent 70%), radial-gradient(30% 24% at 52% 90%, rgba(231, 198, 107, .14), transparent 70%); }
+  .glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle at 66% 52%, rgba(231, 198, 107, .3), transparent 42%), linear-gradient(to bottom, rgba(7, 7, 7, .1), rgba(7, 7, 7, .55) 55%, rgba(7, 7, 7, .95)); }
+  .ring { position: absolute; left: 66%; top: 46%; border-radius: 50%; border: 1px solid var(--gold); transform: translate(-50%, -50%); z-index: -1; }
+  .r1 { width: 46%; aspect-ratio: 1; opacity: .4; } .r2 { width: 74%; aspect-ratio: 1; opacity: .24; } .r3 { width: 104%; aspect-ratio: 1; opacity: .12; }
+  .door { position: absolute; left: 66%; bottom: 34%; width: 24%; height: 46%; transform: translateX(-50%); background: #020202; border: 2px solid rgba(231, 198, 107, .6); border-bottom: 0; border-radius: .6rem .6rem 0 0; box-shadow: 0 0 60px rgba(231, 198, 107, .3); z-index: 1; }
+  .slit { position: absolute; top: 4%; bottom: 0; left: 0; width: 36%; background: linear-gradient(to right, var(--gold-lit), rgba(231, 198, 107, .15)); clip-path: polygon(0 0, 100% 9%, 100% 100%, 0 100%); }
+  .spill { position: absolute; left: 66%; bottom: 20%; width: 52%; height: 15%; transform: translateX(-50%); background: linear-gradient(to bottom, rgba(231, 198, 107, .55), transparent); clip-path: polygon(34% 0, 50% 0, 100% 100%, 0 100%); z-index: 1; }
+  .dust { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .dust i { position: absolute; width: var(--s); height: var(--s); border-radius: 50%; background: var(--gold-lit); opacity: .5; }
+  .terror h3 { color: var(--gold-lit); text-shadow: 0 0 34px rgba(231, 198, 107, .35); }
+  .terror .txt, .terror .soon { color: var(--warm); }
+
+  /* ===== No lo oíste de mí: escenario de farándula ===== */
+  .farandula { background: radial-gradient(90% 60% at 50% 0%, #1d1810, #0a0a0a 70%); border: 1px solid rgba(201, 163, 74, .35); color: var(--gold-lit); }
+  /* cortinas de teatro a los lados */
+  .curtain { position: absolute; top: 0; bottom: 0; width: 20%; z-index: -2; background: repeating-linear-gradient(90deg, rgba(201, 163, 74, .2) 0 .9rem, rgba(201, 163, 74, .05) .9rem 1.8rem); }
+  .cl { left: 0; -webkit-mask-image: linear-gradient(to right, #000 20%, transparent); mask-image: linear-gradient(to right, #000 20%, transparent); }
+  .cr { right: 0; -webkit-mask-image: linear-gradient(to left, #000 20%, transparent); mask-image: linear-gradient(to left, #000 20%, transparent); }
+  /* reflector que cae sobre el micrófono */
+  .cone { position: absolute; top: 0; left: 50%; width: 92%; height: 66%; transform: translateX(-50%); z-index: -1; background: linear-gradient(to bottom, rgba(255, 238, 196, .34), rgba(231, 198, 107, .06) 92%); clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%); }
+  .pool { position: absolute; left: 50%; top: 58%; width: 78%; height: 14%; transform: translateX(-50%); z-index: -1; background: radial-gradient(ellipse at center, rgba(231, 198, 107, .5), transparent 68%); }
+  .mic { position: absolute; z-index: 1; left: 50%; top: 22%; width: clamp(5.4rem, 19%, 9.4rem); transform: translateX(-50%); color: var(--gold-lit); }
+  .farandula h3 { color: var(--white); }
+  .farandula .txt, .farandula .soon { color: var(--warm); }
+  .farandula .tag { color: var(--gold-lit); }
+  .bub { position: absolute; z-index: 2; border-radius: 1.5rem 1.5rem 1.5rem .3rem; display: flex; align-items: center; justify-content: center; gap: .45rem; }
+  .b1 { left: 11%; top: 17%; width: clamp(5.4rem, 20%, 8.6rem); height: clamp(2.8rem, 6.5vh, 4rem); background: var(--gold-lit); transform: rotate(-6deg); }
+  .b1 i { width: .65rem; height: .65rem; border-radius: 50%; background: var(--black); }
+  .b2 { right: 12%; top: 15%; padding: .75rem 1.1rem; background: var(--warm); color: var(--black); font-size: .82rem; border-radius: 1.3rem 1.3rem .3rem 1.3rem; transform: rotate(5deg); }
+  .b3 { right: 15%; top: 36%; padding: .65rem 1rem; border: 1.5px solid var(--gold-lit); color: var(--gold-lit); font-size: .78rem; border-radius: 1.2rem 1.2rem 1.2rem .3rem; transform: rotate(-4deg); }
+  /* destellos de cámaras fotográficas */
+  .flash { position: absolute; z-index: 2; color: var(--white); line-height: 1; text-shadow: 0 0 18px rgba(255, 240, 200, .95), 0 0 40px rgba(231, 198, 107, .7); opacity: .0; }
+  .f1 { left: 8%; top: 41%; font-size: 2.1rem; } .f2 { left: 30%; top: 12%; font-size: 1.5rem; } .f3 { right: 7%; top: 28%; font-size: 2.4rem; }
+  .f4 { left: 16%; top: 33%; font-size: 1.2rem; } .f5 { right: 28%; top: 45%; font-size: 1.7rem; } .f6 { left: 44%; top: 8%; font-size: 1.2rem; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fog { animation: fog 22s ease-in-out infinite alternate; }
+    .ring { animation: pulse 7s ease-in-out infinite; } .r2 { animation-delay: -2.3s; } .r3 { animation-delay: -4.6s; }
+    .slit { animation: flick 6s steps(1) infinite; }
+    .terror h3 { animation: flick 7s steps(1) infinite; }
+    .dust i { animation: rise 9s linear infinite; animation-delay: var(--d); }
+    .bub { animation: bob 5s ease-in-out infinite; } .b2 { animation-delay: -1.4s; } .b3 { animation-delay: -2.8s; }
+    .b1 i { animation: dot 1.2s ease-in-out infinite; } .b1 i:nth-child(2) { animation-delay: .15s; } .b1 i:nth-child(3) { animation-delay: .3s; }
+    .flash { animation: pop 5s ease-out infinite; }
+    .f2 { animation-delay: -.8s; animation-duration: 6s; } .f3 { animation-delay: -2.1s; animation-duration: 4.6s; }
+    .f4 { animation-delay: -3.2s; animation-duration: 5.6s; } .f5 { animation-delay: -1.5s; animation-duration: 7s; } .f6 { animation-delay: -4s; animation-duration: 6.4s; }
+  }
+  @keyframes fog { to { transform: translate3d(5%, -4%, 0) scale(1.08); } }
+  @keyframes pulse { 50% { transform: translate(-50%, -50%) scale(1.06); } }
+  @keyframes flick { 0%, 90%, 95%, 100% { opacity: 1; } 91%, 94% { opacity: .5; } 92.5% { opacity: .9; } }
+  @keyframes rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: .55; } 100% { transform: translateY(-4rem); opacity: 0; } }
+  @keyframes bob { 50% { translate: 0 -.5rem; } }
+  @keyframes dot { 50% { transform: translateY(-.3rem); } }
+  /* destello rápido y luego descanso: como el flash de una cámara */
+  @keyframes pop { 0%, 78%, 100% { opacity: 0; transform: scale(.4); } 82% { opacity: 1; transform: scale(1.25); } 90% { opacity: .5; transform: scale(1); } 96% { opacity: 0; } }
+
+  @media (max-width: 860px) {
+    .duo { grid-template-columns: 1fr; height: auto; }
+    .world { min-height: 36rem; }
+    .bot h3 { font-size: clamp(3.4rem, 15vw, 5.6rem); }
+  }
+</style>

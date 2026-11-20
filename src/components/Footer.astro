@@ -1,0 +1,58 @@
+---
+import Logo from './Logo.astro';
+import { contact } from '../data/site';
+const year = new Date().getFullYear();
+const wa = contact.whatsapp.replace(/\D/g, '');
+const nav = [['#que-hacemos', 'Qué hacemos'], ['#podcasts', 'Podcasts'], ['#beneficios', 'Beneficios'], ['#postula', 'Postula']];
+const hasContact = Boolean(contact.email || contact.phone || wa);
+---
+<footer class="foot">
+  <div class="top">
+    <div class="brand">
+      <a href="#top" class="flogo" aria-label="Expansión Live, volver al inicio"><Logo /></a>
+      <p>Agencia de influencers en Perú. Te formamos y te representamos.</p>
+      <p class="backing">Con el respaldo de <b>SPACE PRODUCCIONES</b>.</p>
+    </div>
+    <nav aria-label="Pie de página" class="col">
+      <h2 class="mono">Navegar</h2>
+      <ul>{nav.map(([href, label]) => <li><a href={href}>{label}</a></li>)}</ul>
+    </nav>
+    <div class="col">
+      <h2 class="mono">Contacto</h2>
+      {hasContact || contact.social.length ? (
+        <ul>
+          {contact.email && <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>}
+          {contact.phone && <li><a href={`tel:${contact.phone.replace(/[^+\d]/g, '')}`}>{contact.phone}</a></li>}
+          {wa && <li><a href={`https://wa.me/${wa}`} target="_blank" rel="noopener">WhatsApp</a></li>}
+          {contact.social.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
+        </ul>
+      ) : (
+        <p class="soft">Escríbenos desde el <a class="ul" href="#postula">formulario</a>.</p>
+      )}
+    </div>
+  </div>
+  <div class="bar mono">
+    <span>© {year} Expansión Live · Perú</span>
+    <span>Para trabajar con la agencia: mayores de 18 años · contrato firmado</span>
+    <a href="#top" class="up">Volver arriba ↑</a>
+  </div>
+</footer>
+<style>
+  .foot { background: var(--black); border-top: 1px solid var(--line); padding: clamp(3rem, 6vw, 5rem) var(--pad) 1.6rem; }
+  .top { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .flogo { --lm: 3rem; --lf: 1.6rem; display: inline-block; }
+  .brand p { margin-top: 1.2rem; max-width: 22rem; opacity: .7; font-size: .95rem; }
+  .brand .backing { margin-top: .6rem; opacity: .9; }
+  .backing b { font-weight: 600; }
+  .col h2 { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; line-height: 1.4; color: var(--gold); margin-bottom: 1.1rem; }
+  .col ul { list-style: none; display: grid; gap: .5rem; }
+  .col a { display: inline-block; padding: .15rem 0; opacity: .85; transition: color .3s, opacity .3s; }
+  .col a:hover, .col a:focus-visible { color: var(--gold-lit); opacity: 1; }
+  .soft { opacity: .7; font-size: .95rem; max-width: 16rem; }
+  .ul { text-decoration: underline; text-underline-offset: .25em; }
+  .bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .8rem 2rem; margin-top: clamp(3rem, 6vw, 5rem); padding: 1.4rem 5rem 0 0; border-top: 1px solid var(--line); font-size: .68rem; }
+  .bar > span { opacity: .6; }
+  .bar .up { color: var(--gold); padding: .4rem 0; }
+  @media (max-width: 760px) { .top { grid-template-columns: 1fr 1fr; } .brand { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .top { grid-template-columns: 1fr; } .bar { flex-direction: column; align-items: flex-start; } }
+</style>
